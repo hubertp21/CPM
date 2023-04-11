@@ -1,6 +1,7 @@
 package com.example.cpm.algorithm.implementation;
 
 import com.example.cpm.algorithm.Event;
+import com.example.cpm.algorithm.Wrapper;
 
 import java.util.HashSet;
 import java.util.List;
@@ -9,38 +10,53 @@ import java.util.Set;
 public class CpmCriticalPathFinder {
 
     private final Set<Character> criticalPath = new HashSet<>();
-    private Integer criticalPathCost = 0;
     
-    public String calculateCriticalPath(List<Event> eventList) {
-        criticalPath.clear();
-        criticalPathCost = 0;
-        setUpEvents(eventList);
-        for (Event event : eventList) {
-            criticalPath.add(event.getEventCharacter());
-            if (event.getPredecessor().size() > 1) {
-                List<Character> predecessors = event.getPredecessor();
-                int maxDuration = 0;
-                char lastPredecessor = '!';
-                removeUnnecessaryEvents(eventList, predecessors, maxDuration, lastPredecessor);
+    public Wrapper calculateCriticalPath(List<Event> eventList) {
+        Event longest = getStartingTimes(eventList);
+        int criticalDuration = longest.getStartTime() + longest.getDuration();
+
+        criticalPath.add(longest.getEventCharacter());
+        while(true) {
+            double max = 0;
+            char predecessor = '!';
+            if(longest.getPredecessor().get(0) == 'A') {
+                criticalPath.add('A');
+                break;
             }
+            for (char pre : longest.getPredecessor()) {
+                if(getEvent(eventList, pre).getStartTime() + getEvent(eventList, pre).getDuration() > max) {
+                    max = getEvent(eventList, pre).getStartTime() + getEvent(eventList, pre).getDuration();
+                    predecessor = pre;
+                }
+            }
+            longest = getEvent(eventList, predecessor);
+            criticalPath.add(predecessor);
         }
-        return criticalPath.toString() + calculateCost(eventList);
+
+        return new Wrapper(eventList, criticalPath.toString() + criticalDuration);
     }
 
-    private void removeUnnecessaryEvents(List<Event> eventList, List<Character> predecessors, int maxDuration, char lastPredecessor) {
-        for (Character predecessor : predecessors) {
-            Event predecessorEvent = getEvent(eventList, predecessor);
-            if (predecessorEvent.getDuration() > maxDuration) {
-                maxDuration = predecessorEvent.getDuration();
-                if (lastPredecessor != '!') {
-                    criticalPath.remove(lastPredecessor);
-                }
-                lastPredecessor = predecessorEvent.getEventCharacter();
-            }
+    public Event getStartingTimes(List<Event> eventList) {
+        Event longest = new Event();
+        int longestTime = 0;
+        for(Event event : eventList) {
+            if(event.getEventCharacter() == 'A')
+                event.setStartTime(0);
             else {
-                criticalPath.remove(predecessorEvent.getEventCharacter());
+                int max = 0;
+                for(char predecessor : event.getPredecessor()) {
+                    if(getEvent(eventList, predecessor).getStartTime() + getEvent(eventList, predecessor).getDuration() > max)
+                        max = getEvent(eventList, predecessor).getStartTime() + getEvent(eventList, predecessor).getDuration();
+                }
+                event.setStartTime(max);
+            }
+            if(event.getDuration() + event.getStartTime() > longestTime) {
+                longestTime = event.getDuration() + event.getStartTime();
+                longest = event;
             }
         }
+
+        return longest;
     }
 
     private Event getEvent(List<Event> eventList, Character event) {
@@ -48,22 +64,5 @@ public class CpmCriticalPathFinder {
                 .filter(e -> event.equals(e.getEventCharacter()))
                 .findAny()
                 .orElse(null);
-    }
-
-    private void setUpEvents(List<Event> eventList) {
-        eventList.get(0).setEventAsStartingEvent();
-        eventList.get(eventList.size()-1).setEventAsEndingEvent();
-        eventList.forEach(event -> {
-            if (event.getDuration() == 0) {
-                event.setEventAsDummyEvent();
-            }
-        });
-    }
-
-    private Integer calculateCost(List<Event> eventList) {
-        for (Character event : criticalPath) {
-            criticalPathCost += getEvent(eventList, event).getDuration();
-        }
-        return criticalPathCost;
     }
 }

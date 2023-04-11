@@ -1,6 +1,7 @@
 package com.example.cpm.algorithm.implementation;
 
 import com.example.cpm.algorithm.Event;
+import com.example.cpm.algorithm.Wrapper;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public class CpmAlgorithmExecutor {
     private final CpmCriticalPathFinder cpmCriticalPathFinder = new CpmCriticalPathFinder();
     private final CpmEventValidator validator = new CpmEventValidator();
 
-    public String execute(List<Event> eventList) {
+    public Wrapper execute(List<Event> eventList) {
         log.debug("Starting to validate event data");
         validator.validateEvents(eventList);
         if (!validator.isValidated) {

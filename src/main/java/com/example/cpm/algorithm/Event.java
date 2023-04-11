@@ -2,10 +2,7 @@ package com.example.cpm.algorithm;
 
 import static java.util.Collections.emptyList;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,17 +10,19 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 public class Event {
 
     private Character eventCharacter;
     private List<Character> predecessor;
-    private Integer duration;
+    private Integer duration, startTime;
     private EventType eventType;
 
     public void setEventAsStartingEvent() {
         this.setEventCharacter('A');
         this.setPredecessor(emptyList());
         this.setEventType(EventType.STARTING_EVENT);
+        this.setStartTime(0);
     }
 
     public void setEventAsEndingEvent(){

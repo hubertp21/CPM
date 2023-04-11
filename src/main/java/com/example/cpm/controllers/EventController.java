@@ -1,18 +1,18 @@
-package com.example.cpm;
+package com.example.cpm.controllers;
 
-import com.example.cpm.algorithm.PredecessorEventsExecutor;
+import com.example.cpm.algorithm.csv.CsvToPredecessorEventsExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CriticalPathController {
+public class EventController {
 
-    private final PredecessorEventsExecutor executor = new PredecessorEventsExecutor();
+    private final CsvToPredecessorEventsExecutor executor = new CsvToPredecessorEventsExecutor();
 
-    @GetMapping("/criticalPath")
+    @GetMapping("/events")
     public String criticalPath(@RequestParam String FILE) {
         String CONTENT_ROOT = "src/main/resources/static/";
-        return executor.execute(CONTENT_ROOT+FILE);
+        return executor.parseCsv(CONTENT_ROOT+FILE).toString();
     }
 }

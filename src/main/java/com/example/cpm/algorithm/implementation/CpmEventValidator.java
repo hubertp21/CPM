@@ -17,7 +17,6 @@ public class CpmEventValidator {
             cause = "EVENTS ARE NOT IN ALPHABETICAL ORDER";
             throw new RuntimeException(cause);
         }
-
     }
 
     public String getErrorCause() {

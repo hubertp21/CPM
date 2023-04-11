@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+</head>
+<body>
+    <section id="container">
+        <section id="main">
+        </section>
+
+        <div >
+            <section class="finishData">
+                <label for="amount">Ilosc czynnosci:</label>
+                <div id="amount"></div>
+                <label for="critical">sciezka krytyczna: <div th:text="${critical}"></div></label>
+                <div id="critical"></div>
+                <label></label>
+                <div id="scale">
+                    <div class="border">0</div>
+                    <div class="border">10</div>
+                    <div class="border">20</div>
+                    <div class="border">30</div>
+                    <div class="border">40</div>
+                    <div class="border">50</div>
+                    <div class="border">60</div>
+                    <div class="border">70</div>
+                    <div class="border">80</div>
+                    <div class="border">90</div>
+                </div>
+                <div id="graph" th:each="item: ${items}">
+                    <div class="name" th:text="${item.getEventCharacter()}" th:style="'margin-left: ' + ${item.getStartTime() * 10} + 'px;'"></div>
+                    <div class="duration"
+                         th:style="'width: ' + ${item.getDuration() * 10} + 'px; margin-left: ' + ${item.getStartTime() * 10} + 'px;'">
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <footer>
+        By JP & HP & ST
+    </footer>
+</body>
+</html>

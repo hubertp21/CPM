@@ -12,11 +12,11 @@ public class PredecessorEventsExecutor {
 
     private final CsvToPredecessorEventsExecutor csvParser = new CsvToPredecessorEventsExecutor();
     private final CpmAlgorithmExecutor cpmAlgorithmExecutor = new CpmAlgorithmExecutor();
-    private String result;
+    private Wrapper result;
 
-    public String execute(String FILE) {
-        log.debug("Algorithm started to execute...");
+    public Wrapper execute(String FILE) {
         List<Event> eventList = Collections.emptyList();
+        log.debug("Algorithm started to execute...");
         try {
             log.debug("Parsing csv...");
             eventList = csvParser.parseCsv(FILE);

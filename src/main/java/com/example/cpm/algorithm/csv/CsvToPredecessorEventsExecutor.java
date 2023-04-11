@@ -46,6 +46,6 @@ public class CsvToPredecessorEventsExecutor {
         Integer duration = Integer.parseInt(rowAsList.get(1));
         List<Character> predecessors = rowAsList.get(2).chars()
                 .mapToObj(e->(char)e).toList();
-        return new Event(eventChar, predecessors, duration, EventType.BASIC_EVENT);
+        return new Event(eventChar, predecessors, duration, 0, EventType.BASIC_EVENT);
     }
 }
